@@ -8,8 +8,8 @@ const ejs = require('ejs')
 
 
 aws.config.update({
-    secretAccessKey: 'YXyaujFNKLH5PiQykIC2r8H8zFmK5FK4az365gGm',
-    accessKeyId: 'AKIAI5A5BNTWNILBVWXQ',
+    secretAccessKey: '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',
+    accessKeyId: 'AKIAJPPKKQ73L7C5DH4A',
     region: 'us-east-2'
 })
 
