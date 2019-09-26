@@ -16,18 +16,18 @@ aws.config.update({
 
 const s3 = new aws.S3()
 
-// // Set Storage Engine
-// const storage = multer.diskStorage({
-//     destination: './public/uploads/',
-//     filename: function (req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-//     }
-// })
+// Set Storage Engine
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+})
 
 // // Init Upload
 // const upload = multer({
 //     storage: storage,
-//     limits: { fileSize: 5000000 },
+//     limits: { fileSize: 1000000 },
 //     fileFilter(req, file, cb) {
 //         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
 //             return cb(new Error('Please upload .jpg, .jpeg, .png'))
@@ -43,13 +43,18 @@ const upload = multer({
       s3: s3,
       bucket: 'gmens-test-1',
       acl: 'public-read',
-      metadata: function (req, file, cb) {
-        cb(null, {fieldName: 'TESTING_META_DATA'});
-      },
-      key: function (req, file, cb) {
-        cb(null, Date.now().toString())
-      }
-    })
+      filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+    }), 
+    limits: { fileSize: 1000000 },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload .jpg, .jpeg, .png'))
+        }
+
+        cb(undefined, true)
+    }
   }).single('myImage')
 
 
