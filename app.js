@@ -1,10 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const aws = require('aws-sdk')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const path = require('path')
 const ejs = require('ejs')
-require('dotenv').config()
+
 
 aws.config.update({
     secretAccessKey: process.env.AWSSecretKey,
@@ -77,8 +78,8 @@ app.post('/upload', (req, res) => {
                 })
             } else {
                 res.render('index', {
-                    msg: 'File Uploaded!',
-                    file: `uploads/${req.file.filename}`
+                    msg: 'File Uploaded!'
+                    //file: `uploads/${req.file.filename}`
                 })
             }
         }
