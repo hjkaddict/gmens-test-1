@@ -1,28 +1,55 @@
+
 const express = require('express')
+const aws = require('aws-sdk')
 const multer = require('multer')
+const multerS3 = require('multer-s3')
 const path = require('path')
 const ejs = require('ejs')
 
-// Set Storage Engine
-const storage = multer.diskStorage({
-    destination: './public/uploads/',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-    }
+
+aws.config.update({
+    secretAccessKey: 'YXyaujFNKLH5PiQykIC2r8H8zFmK5FK4az365gGm',
+    accessKeyId: 'AKIAI5A5BNTWNILBVWXQ',
+    region: 'us-east-2'
 })
 
-// Init Upload
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5000000 },
-    fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            return cb(new Error('Please upload .jpg, .jpeg, .png'))
-        }
 
-        cb(undefined, true)
-    }
-}).single('myImage')
+const s3 = new aws.S3()
+
+// // Set Storage Engine
+// const storage = multer.diskStorage({
+//     destination: './public/uploads/',
+//     filename: function (req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+//     }
+// })
+
+// // Init Upload
+// const upload = multer({
+//     storage: storage,
+//     limits: { fileSize: 5000000 },
+//     fileFilter(req, file, cb) {
+//         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+//             return cb(new Error('Please upload .jpg, .jpeg, .png'))
+//         }
+
+//         cb(undefined, true)
+//     }
+// }).single('myImage')
+
+
+const upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'gmens-test-1',
+      metadata: function (req, file, cb) {
+        cb(null, {fieldName: 'TESTING_META_DATA'});
+      },
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString())
+      }
+    })
+  }).single('myImage')
 
 
 // Init app
