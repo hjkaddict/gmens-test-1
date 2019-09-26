@@ -1,15 +1,14 @@
-
 const express = require('express')
 const aws = require('aws-sdk')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const path = require('path')
 const ejs = require('ejs')
-
+require('dotenv').config()
 
 aws.config.update({
-    secretAccessKey: '/WND34depxf3u+XgEm2e4ac5qYhsaPqB5bGyAnFQ',
-    accessKeyId: 'AKIAJPPKKQ73L7C5DH4A',
+    secretAccessKey: process.env.secretAccessKey,
+    accessKeyId: process.env.accessKeyId,
     region: 'us-east-2'
 })
 
