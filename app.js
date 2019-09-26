@@ -7,8 +7,8 @@ const ejs = require('ejs')
 require('dotenv').config()
 
 aws.config.update({
-    secretAccessKey: process.env.secretAccessKey,
-    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.AWSSecretKey,
+    accessKeyId: process.env.AWSAccessKeyId,
     region: 'us-east-2'
 })
 
