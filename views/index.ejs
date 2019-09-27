@@ -9,38 +9,6 @@
 
     <title>GMens-test</title>
 
-    <script src="http://www.webglearth.com/v2/api.js"></script>
-    <script>
-        function initialize() {
-
-            var earth = new WE.map('earth_div');
-
-            earth.setView([44, 10], 1.5);
-            //korea
-            //earth.setView([35, 127], 3);
-            WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                //attribution: '© OpenStreetMap contributors'
-            }).addTo(earth);
-
-            var swiss = WE.tileLayerJSON('http://tileserver.maptiler.com/swissimage25m.json', {
-            });
-            swiss.addTo(earth);
-            earth.setTilt(0);
-            earth.setHeading(0)
-
-            // // animate start
-            var before = null;
-            requestAnimationFrame(function animate(now) {
-                var c = earth.getPosition();
-                var elapsed = before ? now - before : 0;
-                before = now;
-                earth.setCenter([c[0], c[1] - 0.1 * (elapsed / 30)]);
-                requestAnimationFrame(animate);
-            })
-            // // animation end
-
-        }
-    </script>
 
     <style>
         html,
@@ -50,17 +18,22 @@
             margin: 0;
         }
 
-        #earth_div {
-            top: 220px;
+        #webgl {
+            top: 0;
             right: 0;
             bottom: 0;
             left: 0;
-            background-color: transparent;
+
             position: absolute !important;
         }
 
         h1 {
             font-size: 20px;
+            color: aliceblue;
+        }
+
+        h2 {
+            font-size: 15px;
             color: aliceblue;
         }
 
@@ -72,33 +45,48 @@
 
 </head>
 
-<body onload="initialize()">
+<body>
 
-    <!--<div id="earth_div"></div>-->   
-    <div class="container" id="earth_div"></div>
+    <!--<div id="earth_div"></div>-->
 
+
+
+    <div id="webgl"></div>
     <div class="container">
-        <h1>Image Upload Testing</h1>
-        <%= typeof msg != 'undefined' ? msg : '' %>
+        <div class="input-field">
+            <h1>GMens Testing</h1>
+            <h2><%= typeof msg != 'undefined' ? msg : '' %></h2>
+        </div>
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="file-field input-field">
                 <div class="btn green">
-                    <span>File</span>
+                    <span>Image</span>
                     <input name="myImage" type="file">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate custom" type="text">
                 </div>
             </div>
-            <button type="submit" class="btn">Submit</button>
+            <div class="input-field">
+                <button type="submit" class="btn">Submit</button>
+            </div>
+
         </form>
         <br>
         <img src="<%= typeof imgUrl != 'undefined' ? imgUrl : '' %>" class="responsive-img">
     </div>
 
+
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/three.min.js"></script>
+    <script src="/Detector.js"></script>
+    <script src="/TrackballControls.js"></script>
+    <script src="/earth.js"></script>
 </body>
 
 </html>
