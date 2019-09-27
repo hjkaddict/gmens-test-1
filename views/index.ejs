@@ -15,14 +15,15 @@
 
             var earth = new WE.map('earth_div');
 
-            earth.setView([44, 10], 2);
+            earth.setView([44, 10], 1.5);
             //korea
             //earth.setView([35, 127], 3);
             WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
+                //attribution: '© OpenStreetMap contributors'
             }).addTo(earth);
 
-            var swiss = WE.tileLayerJSON('http://tileserver.maptiler.com/swissimage25m.json');
+            var swiss = WE.tileLayerJSON('http://tileserver.maptiler.com/swissimage25m.json', {
+            });
             swiss.addTo(earth);
             earth.setTilt(0);
             earth.setHeading(0)
@@ -35,7 +36,7 @@
                 before = now;
                 earth.setCenter([c[0], c[1] - 0.1 * (elapsed / 30)]);
                 requestAnimationFrame(animate);
-            });
+            })
             // // animation end
 
         }
@@ -50,7 +51,7 @@
         }
 
         #earth_div {
-            top: 200px;
+            top: 220px;
             right: 0;
             bottom: 0;
             left: 0;
@@ -58,9 +59,16 @@
             position: absolute !important;
         }
 
-        h2 {
-            color:aliceblue;
+        h1 {
+            font-size: 20px;
+            color: aliceblue;
         }
+
+        .custom {
+            color: white;
+        }
+
+
     </style>
 
 
@@ -72,16 +80,16 @@
     <div class="container" id="earth_div"></div>
 
     <div class="container">
-        <h2>Image Upload</h2>
+        <h1>Image Upload Testing</h1>
         <%= typeof msg != 'undefined' ? msg : '' %>
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="file-field input-field">
-                <div class="btn grey">
+                <div class="btn green">
                     <span>File</span>
                     <input name="myImage" type="file">
                 </div>
                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
+                    <input class="custom file-path validate" type="text">
                 </div>
             </div>
             <button type="submit" class="btn">Submit</button>
