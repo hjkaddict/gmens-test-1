@@ -2,9 +2,11 @@ require('dotenv').config()
 const express = require('express')
 const aws = require('aws-sdk')
 const multer = require('multer')
-const multerS3 = require('multer-s3')
+const multerS3 = require('multer-s3-transform')
 const path = require('path')
 const ejs = require('ejs')
+const Jimp = require('jimp')
+const sharp = require('sharp')
 
 
 aws.config.update({
@@ -13,50 +15,48 @@ aws.config.update({
     region: 'us-east-2'
 })
 
-
 const s3 = new aws.S3()
-
-// // Set Storage Engine
-// const storage = multer.diskStorage({
-//     destination: './public/uploads/',
-//     filename: function (req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-//     }
-// })
-
-// // Init Upload
-// const upload = multer({
-//     storage: storage,
-//     limits: { fileSize: 1000000 },
-//     fileFilter(req, file, cb) {
-//         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-//             return cb(new Error('Please upload .jpg, .jpeg, .png'))
-//         }
-
-//         cb(undefined, true)
-//     }
-// }).single('myImage')
-
 
 const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'gmens-test-1',
-        key: function (req, file, cb) {
-            //console.log(file)
-            cb(null, file.originalname)
-        },
-        acl: 'public-read'
-    }),
-    limits: { fileSize: 1000000 },
-    fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|JPEG|JPG|PNG)$/)) {
-            return cb(new Error('Please upload .jpg, .jpeg, .png'))
-        }
+        acl: 'public-read',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        limits: { fileSize: 5000000 },
 
-        cb(undefined, true)
-    }
-}).single('myImage')
+        //* add a function 'Please upload .jpg .jpeg .png' here
+
+        fileFilter: function (req, file, cb) {
+            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+                return cb(new Error('Only image files are allowed!'));
+            }
+            cb(null, true);
+        },
+
+        shouldTransform: function (req, file, cb) {
+            cb(null, /^image/i.test(file.mimetype))
+        },
+        transforms: [{
+            id: 'manipulated',
+            key: function (req, file, cb) {
+                let fileSplit = file.originalname.split('.')
+
+                let filename = fileSplit.slice(0, fileSplit.length - 1)
+                filename.push(Date.now())
+                filename = filename.join('_') + '.' + fileSplit[fileSplit.length - 1]
+
+                cb(null, filename)
+            },
+            transform: function (req, file, cb) {
+                cb(null, sharp().modulate({ hue: 120 }))
+            }
+        }]
+    })
+})
+
+
+
 
 
 // Init app
@@ -71,25 +71,20 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-app.post('/upload', (req, res) => {
-    upload(req, res, (err) => {
-        if (err) {
-            res.render('index', {
-                msg: err
-            })
-        } else {
-            if (!req.file) {
-                res.render('index', {
-                    msg: 'Error: No File Selected!'
-                })
-            } else {
-                res.render('index', {
-                    msg: 'File Uploaded!',
-                    imgUrl: req.file.location
-                })
-            }
-        }
-    })
+app.post('/upload', upload.single('myImage'), (req, res, next) => {
+
+
+    if (!req.file) {
+        res.render('index', {
+            msg: 'Error: No File Selected!'
+        })
+    } else {
+        res.render('index', {
+            msg: 'File Uploaded!',
+            imgUrl: req.file.transforms[0].location
+        })
+    }
+
 })
 
 
