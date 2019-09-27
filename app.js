@@ -49,14 +49,15 @@ const upload = multer({
                 cb(null, filename)
             },
             transform: function (req, file, cb) {
-                cb(null, sharp().modulate({ hue: 120 }))
+                cb(null, sharp().jpeg({
+                    quality: 10,
+                    chromaSubsampling: '4:4:4'
+                })                  
+                    .modulate({ hue: 120 }))
             }
         }]
     })
 })
-
-
-
 
 
 // Init app
