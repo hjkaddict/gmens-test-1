@@ -63,6 +63,10 @@
             font-size: 20px;
             color: aliceblue;
         }
+
+        .custom {
+            color: white;
+        }
     </style>
 
 
@@ -70,7 +74,7 @@
 
 <body onload="initialize()">
 
-    <!--<div id="earth_div"></div>-->
+    <!--<div id="earth_div"></div>-->   
     <div class="container" id="earth_div"></div>
 
     <div class="container">
@@ -78,12 +82,12 @@
         <%= typeof msg != 'undefined' ? msg : '' %>
         <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="file-field input-field">
-                <div class="btn grey">
+                <div class="btn green">
                     <span>File</span>
                     <input name="myImage" type="file">
                 </div>
                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
+                    <input class="file-path validate custom" type="text">
                 </div>
             </div>
             <button type="submit" class="btn">Submit</button>
