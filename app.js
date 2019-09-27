@@ -12,7 +12,7 @@ const sharp = require('sharp')
 aws.config.update({
     secretAccessKey: process.env.AWSSecretKey,
     accessKeyId: process.env.AWSAccessKeyId,
-    region: 'us-east-2'
+    region: 'eu-central-1'
 })
 
 const s3 = new aws.S3()
@@ -27,12 +27,12 @@ const upload = multer({
 
         //* add a function 'Please upload .jpg .jpeg .png' here
 
-        fileFilter: function (req, file, cb) {
-            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-                return cb(new Error('Only image files are allowed!'));
-            }
-            cb(null, true);
-        },
+        // fileFilter: function (req, file, cb) {
+        //     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        //         return cb(new Error('Only image files are allowed!'));
+        //     }
+        //     cb(null, true);
+        // },
 
         shouldTransform: function (req, file, cb) {
             cb(null, /^image/i.test(file.mimetype))
