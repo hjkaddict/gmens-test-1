@@ -51,7 +51,6 @@ const upload = multer({
             transform: function (req, file, cb) {
                 cb(null, sharp().jpeg({
                     quality: 10,
-                    chromaSubsampling: '4:4:4'
                 })                  
                     .modulate({ hue: 120 }))
             }
