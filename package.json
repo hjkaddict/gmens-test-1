@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js -e js,ejs"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +21,8 @@
     "multer-s3-transform": "^2.3.2",
     "path": "^0.12.7",
     "sharp": "^0.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
   }
 }

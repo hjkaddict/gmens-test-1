@@ -79,10 +79,13 @@ app.post('/upload', upload.single('myImage'), (req, res, next) => {
             msg: 'Error: No File Selected!'
         })
     } else {
+       
         res.render('index', {
             msg: 'File Uploaded!',
             imgUrl: req.file.transforms[0].location
+          
         })
+        console.log(imgUrl)
     }
 
 })
