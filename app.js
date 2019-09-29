@@ -85,7 +85,6 @@ app.post('/upload', upload.single('myImage'), (req, res, next) => {
             imgUrl: req.file.transforms[0].location
           
         })
-        console.log(imgUrl)
     }
 
 })

@@ -22,7 +22,7 @@
 	var camera = new THREE.PerspectiveCamera(45, width / height, 0.01, 1000);
 	camera.position.z = 2.0;
 
-	var renderer = new THREE.WebGLRenderer( {alpha:true});
+	var renderer = new THREE.WebGLRenderer( {alpha:false});
 	renderer.setSize(width, height);
 
 	// Light setup

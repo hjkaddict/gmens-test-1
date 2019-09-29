@@ -13,7 +13,7 @@
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
 
 //New Renderer
-var renderer = new THREE.WebGLRenderer({ alpha: false });
+var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -23,9 +23,9 @@ var planet = new THREE.Object3D();
 var geometry = new THREE.SphereGeometry(10, 32, 32);
 var material = new THREE.MeshBasicMaterial({
     color: 0x333333,
-    wireframe: false,
+    wireframe: true,
     transparent: true,
-    opacity: 0
+    opacity: 0.5
 });
 var sphere = new THREE.Mesh(geometry, material);
 
@@ -49,8 +49,8 @@ function latLongToVector3(lat_, lon_, radius_, heigth_) {
 
 
 
-var lati = 68.511045
-var long = -41.531639
+var lati = 7.326752
+var long = 6.134813
 var loc = latLongToVector3(lati, long - 90, 10, 0)
 
 //Create cube
@@ -59,7 +59,7 @@ const loader = new THREE.TextureLoader();
 var geom = new THREE.BoxGeometry(0.5, 0.5, 0.0001);
 var material = new THREE.MeshBasicMaterial({
     //color: 0x00ff00,
-    map: loader.load('https://gmens-test-1.s3.eu-central-1.amazonaws.com/5d4052a9-1cc9-4498-b339-307c02efc7dc_dull_1569614631660.jpg'),
+    map: loader.load('https://gmens-test-1.s3.eu-central-1.amazonaws.com/F5B87C3F-DD6F-445A-880A-AD5BEB7F231E_1569591909264.jpeg'),
 });
 var cube = new THREE.Mesh(geom, material); 
 cube.position.copy(new THREE.Vector3(loc.x, loc.y, loc.z));
@@ -76,13 +76,13 @@ $.getJSON("test_geojson/countries.json", function (data) {
     }, planet);
 });
 
-// $.getJSON("test_geojson/rivers.geojson", function (data) {
-//     drawThreeGeo(data, 10, 'sphere', {
-//         color: 0x22AFFF,
-//         transparent: true,
-//         opacity: 0.4
-//     }, planet);
-// });
+$.getJSON("test_geojson/rivers.geojson", function (data) {
+    drawThreeGeo(data, 10, 'sphere', {
+        color: 0x22AFFF,
+        transparent: true,
+        opacity: 0.4
+    }, planet);
+});
 
 webglEl.appendChild(renderer.domElement);
 
@@ -91,7 +91,7 @@ scene.add(planet);
 // testing
 
 //Set the camera position
-camera.position.z = 20;
+camera.position.z = 16;
 
 //Enable controls
 var controls = new THREE.TrackballControls(camera);
